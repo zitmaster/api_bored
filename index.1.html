@@ -72,7 +72,7 @@
           <p>Du keder dig. Men du har ikke overvejet at du kan bruge det fantastiske bored api til at programmere en
             app, som andre i samme situation kan bruge. Til dette lille projekt skal vi bruge:
             <ul>
-              <li><a href="http://www.boredapi.com/">The bored API</a></li>
+              <li><a href="https://www.boredapi.com/">The bored API</a></li>
               <li><a href="https://handlebarsjs.com/">Handlebars javascript</a></li>
               <li><a href="https://materializecss.com/">Materialize css</a></li>
             </ul>
@@ -203,7 +203,7 @@
     // Get content and handle interaction
     function getRandomActivity() {
       $.ajax({
-        url: "http://www.boredapi.com/api/activity",
+        url: "https://www.boredapi.com/api/activity",
       }).done(function (data) {
         //console.log(data)
         randomActivityPlaceholder.innerHTML = randomActivityTemplate(data);
@@ -212,7 +212,7 @@
 
     function getGroupActivity(n) {
       $.ajax({
-        url: "http://www.boredapi.com/api/activity?participants=" + n,
+        url: "https://www.boredapi.com/api/activity?participants=" + n,
       }).done(function (data) {
         activityByNumberPlaceholder.innerHTML = activityByNumberTemplate(data);
       });
@@ -220,7 +220,7 @@
 
     function getActivityCat(c){
       $.ajax({
-        url: "http://www.boredapi.com/api/activity?type=" + c,
+        url: "https://www.boredapi.com/api/activity?type=" + c,
       }).done(function (data) {
         activityByCatPlaceholder.innerHTML = activityByCatTemplate(data);
       });
