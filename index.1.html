@@ -56,9 +56,9 @@
         <nav>
           <div class="nav-wrapper">
             <ul id="nav-mobile" class="left">
-              <li id="menu-page-one"><a href="#">Side 1</a></li>
-              <li id="menu-page-two"><a href="#">Side 2</a></li>
-              <li id="menu-page-three"><a href="#">Side 3</a></li>
+              <li id="menu-page-one"><a href="#">Random</a></li>
+              <li id="menu-page-two"><a href="#">Social</a></li>
+              <li id="menu-page-three"><a href="#">Type</a></li>
             </ul>
           </div>
         </nav>
@@ -91,6 +91,15 @@
             kan få aktiviteter efter antal personer.</p>
         </div>
       </div>
+      <div class="row">
+        <div class="col s6 m3">
+          <a class="waves-effect waves-light btn-large" onclick="getGroupActivity(1)"><i class="material-icons right">face</i>Alone</a>
+        </div>
+        <div class="col s6 m3">
+          <a class="waves-effect waves-light btn-large" onclick="getGroupActivity(2)"><i class="material-icons right">face</i><i
+              class="material-icons right">face</i>Together</a>
+        </div>
+      </div>
       <div id="activity-by-number">
       </div>
     </div>
@@ -102,7 +111,16 @@
           <p>...?</p>
         </div>
       </div>
-      <div id="some-other-activities">
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="collection">
+            <a href="#!" class="collection-item" onclick="shift(this)">social</a>
+            <a href="#!" class="collection-item" onclick="shift(this)">recreational</a>
+            <a href="#!" class="collection-item" onclick="shift(this)">diy</a>
+          </div>
+        </div>
+      </div>
+      <div id="activity-by-cat">
       </div>
     </div>
 
@@ -133,51 +151,53 @@
   <script id="activity-by-number-template" type="text/x-handlebars-template">
     <div class="row">
         <div class="col s12 m6">
-          <div class="card small">
-            <div class="card-image waves-effect waves-block waves-light">
-              <img class="activator" src="https://source.unsplash.com/300x300/?alone">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">{{type}}</span>
+              <p>{{activity}}</p>
             </div>
-            <div class="card-content">
-              <span class="card-title activator grey-text text-darken-4">Alene<i class="material-icons right">more_vert</i></span>
-              <p><a href="#">This is a link</a></p>
-            </div>
-            <div class="card-reveal">
-              <span class="card-title grey-text text-darken-4">Alene<i class="material-icons right">close</i></span>
-              <p>{{d[0].activity}}</p>
-            </div>
-          </div>
-          <div class="card small">
-              <div class="card-image waves-effect waves-block waves-light">
-                <img class="activator" src="https://source.unsplash.com/300x300/?together">
-              </div>
-              <div class="card-content">
-                <span class="card-title activator grey-text text-darken-4">To sammen<i class="material-icons right">more_vert</i></span>
-                <p><a href="#">This is a link</a></p>
-              </div>
-              <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">To sammen<i class="material-icons right">close</i></span>
-                <p>{{d[1].activity}}</p>
-              </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
             </div>
           </div>
       </div>
+    </div>
+  </script>
+
+  <script id="activity-by-cat-template" type="text/x-handlebars-template">
+    <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">{{type}}</span>
+              <p>{{activity}}</p>
+            </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+      </div>
+    </div>
   </script>
 
 
   <!-- Page functionality
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script>
-    // Setup handlebars
+    // Setup handlebars Random
     var randomActivitySource = document.getElementById("random-activity-template").innerHTML;
     var randomActivityTemplate = Handlebars.compile(randomActivitySource);
     var randomActivityPlaceholder = document.getElementById('random-activity');
 
-    // Setup handlebars
+    // Setup handlebars Social
     var activityByNumberSource = document.getElementById("activity-by-number-template").innerHTML;
     var activityByNumberTemplate = Handlebars.compile(activityByNumberSource);
     var activityByNumberPlaceholder = document.getElementById('activity-by-number');
 
-    let result = [];
+    // Setup handlebars Category
+    var activityByCatSource = document.getElementById("activity-by-cat-template").innerHTML;
+    var activityByCatTemplate = Handlebars.compile(activityByCatSource);
+    var activityByCatPlaceholder = document.getElementById('activity-by-cat');
 
 
     // Get content and handle interaction
@@ -190,16 +210,26 @@
       });
     }
 
-    function getGroupActivity(n, l) {
+    function getGroupActivity(n) {
       $.ajax({
         url: "http://www.boredapi.com/api/activity?participants=" + n,
       }).done(function (data) {
-        result.push(data);
-        if(result.length == l){
-          console.log(result);
-          activityByNumberPlaceholder.innerHTML = activityByNumberTemplate(result);
-        }
+        activityByNumberPlaceholder.innerHTML = activityByNumberTemplate(data);
       });
+    }
+
+    function getActivityCat(c){
+      $.ajax({
+        url: "http://www.boredapi.com/api/activity?type=" + c,
+      }).done(function (data) {
+        activityByCatPlaceholder.innerHTML = activityByCatTemplate(data);
+      });
+    }
+
+    function shift(el){
+      $(".collection-item").removeClass("active");
+      $(el).addClass("active");
+      getActivityCat($(el).html());
     }
 
     //Handle menu
@@ -214,9 +244,6 @@
       $('#page-three').hide();
     });
     $('#menu-page-two').click(function () {
-      [1, 2, 3].forEach(function(i){
-        getGroupActivity(i, 3)
-      });
       $('#page-one').hide();
       $('#page-two').show();
       $('#page-three').hide();
