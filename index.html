@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 
 <head>
 
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Your page title here :)</title>
+  <title>Not anymore</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -53,18 +53,71 @@
 
     <div class="row">
       <div class="col s12 m6">
-        <h4>What to do?</h4>
-        <p>Du keder dig. Men du har ikke overvejet at du kan bruge det fantastiske activity api til at programmere en
-          app, som andre i samme situation kan bruge. Til dette lille projekt skal vi bruge:
-          <ul>
+        <nav>
+          <div class="nav-wrapper">
+            <ul id="nav-mobile" class="left">
+              <li id="menu-page-one"><a href="#">Random</a></li>
+              <li id="menu-page-two"><a href="#">Social</a></li>
+              <li id="menu-page-three"><a href="#">Type</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div id="page-one">
+      <div class="row">
+        <div class="col s12 m6">
+          <h4>What to do?</h4>
+          <p>Refresh to get a random suggestion on what to do. Made with the fabolous:
+            <ul>
               <li><a href="https://www.boredapi.com/">The bored API</a></li>
               <li><a href="https://handlebarsjs.com/">Handlebars javascript</a></li>
               <li><a href="https://materializecss.com/">Materialize css</a></li>
-          </ul>
-        </p>
+            </ul>
+          </p>
+        </div>
+      </div>
+      <div id="random-activity">
       </div>
     </div>
-    <div id="random-activity">
+
+    <div id="page-two">
+      <div class="row">
+        <div class="col s12 m6">
+          <h4>Alone or together?</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s6 m3">
+          <a class="waves-effect waves-light btn-large" onclick="getGroupActivity(1)"><i class="material-icons right">face</i>Alone</a>
+        </div>
+        <div class="col s6 m3">
+          <a class="waves-effect waves-light btn-large" onclick="getGroupActivity(2)"><i class="material-icons right">face</i><i
+              class="material-icons right">face</i>Together</a>
+        </div>
+      </div>
+      <div id="activity-by-number">
+      </div>
+    </div>
+
+    <div id="page-three">
+      <div class="row">
+        <div class="col s12 m6">
+          <h4>Choose a category</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="collection">
+            <a href="#!" class="collection-item" onclick="shift(this)">social</a>
+            <a href="#!" class="collection-item" onclick="shift(this)">recreational</a>
+            <a href="#!" class="collection-item" onclick="shift(this)">diy</a>
+          </div>
+        </div>
+      </div>
+      <div id="activity-by-cat">
+      </div>
     </div>
 
   </div>
@@ -74,6 +127,7 @@
 
   <!-- Handlebar templates
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- LAV TEMPLATES TIL DINE FORSKELLIGE ELEMENTER -->
   <script id="random-activity-template" type="text/x-handlebars-template">
     <div class="row">
         <div class="col s12 m6">
@@ -90,40 +144,116 @@
     </div>
 </script>
 
+  <script id="activity-by-number-template" type="text/x-handlebars-template">
+    <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">{{type}}</span>
+              <p>{{activity}}</p>
+            </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+      </div>
+    </div>
+  </script>
+
+  <script id="activity-by-cat-template" type="text/x-handlebars-template">
+    <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">{{type}}</span>
+              <p>{{activity}}</p>
+            </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+      </div>
+    </div>
+  </script>
+
+
   <!-- Page functionality
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script>
-    // Setup handlebars
+    // Setup handlebars Random
     var randomActivitySource = document.getElementById("random-activity-template").innerHTML;
     var randomActivityTemplate = Handlebars.compile(randomActivitySource);
     var randomActivityPlaceholder = document.getElementById('random-activity');
 
+    // Setup handlebars Social
+    var activityByNumberSource = document.getElementById("activity-by-number-template").innerHTML;
+    var activityByNumberTemplate = Handlebars.compile(activityByNumberSource);
+    var activityByNumberPlaceholder = document.getElementById('activity-by-number');
+
+    // Setup handlebars Category
+    var activityByCatSource = document.getElementById("activity-by-cat-template").innerHTML;
+    var activityByCatTemplate = Handlebars.compile(activityByCatSource);
+    var activityByCatPlaceholder = document.getElementById('activity-by-cat');
+
 
     // Get content and handle interaction
-    $.ajax({
-      url: "https://www.boredapi.com/api/activity",
-    }).done(function (data) {
-      console.log(data)
-      randomActivityPlaceholder.innerHTML = randomActivityTemplate(data);
+    function getRandomActivity() {
+      $.ajax({
+        url: "https://www.boredapi.com/api/activity",
+      }).done(function (data) {
+        //console.log(data)
+        randomActivityPlaceholder.innerHTML = randomActivityTemplate(data);
+      });
+    }
+
+    function getGroupActivity(n) {
+      $.ajax({
+        url: "https://www.boredapi.com/api/activity?participants=" + n,
+      }).done(function (data) {
+        activityByNumberPlaceholder.innerHTML = activityByNumberTemplate(data);
+      });
+    }
+
+    function getActivityCat(c) {
+      $.ajax({
+        url: "https://www.boredapi.com/api/activity?type=" + c,
+      }).done(function (data) {
+        activityByCatPlaceholder.innerHTML = activityByCatTemplate(data);
+      });
+    }
+
+    function shift(el) {
+      $(".collection-item").removeClass("active");
+      $(el).addClass("active");
+      getActivityCat($(el).html());
+    }
+
+    //Handle menu
+    getRandomActivity()
+    $('#page-two').hide();
+    $('#page-three').hide();
+
+    $('#menu-page-one').click(function () {
+      getRandomActivity()
+      $('#page-one').show();
+      $('#page-two').hide();
+      $('#page-three').hide();
     });
+    $('#menu-page-two').click(function () {
+      $('#page-one').hide();
+      $('#page-two').show();
+      $('#page-three').hide();
+    });
+    $('#menu-page-three').click(function () {
+      $('#page-one').hide();
+      $('#page-two').hide();
+      $('#page-three').show();
+    });
+    
   </script>
 
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 
 </html>
-
-
-<!-- 
-OPGAVER 
-
-
-I denne øvelse skal vi følge tre grundlæggende trin i mange programmeringsprojekter. 
-For det første skal vi hente noget data, for det andet skal vi formattere det i HTML,
-og til sidst skal vi præsentere det for brugeren med et enkelt layout.   
-
-
-https://source.unsplash.com/400x400/?diy
-
-http://www.google.com/search?q={{activity}}
-
--->
