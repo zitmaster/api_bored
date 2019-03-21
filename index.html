@@ -67,6 +67,10 @@
     <div id="random-activity">
     </div>
 
+    <!--Placeholder-->
+    <div id = "social-activity">
+    </div>
+
   </div>
 
   <!-- End Document body
@@ -83,11 +87,30 @@
               <p>{{activity}}</p>
             </div>
             <div class="card-action">
-              <a href="#">This is a link</a>
+              <a href="http://www.google.com/search?q={{activity}}">Try you luck</a>
             </div>
           </div>
       </div>
     </div>
+</script>
+
+<script id="social-activity-template" type="text/x-handlebars-template">
+  <div class="row">
+    <div class="col s12 m7">
+      <div class="card">
+        <div class="card-image">
+          <img src="https://source.unsplash.com/400x400/?{{type}}">
+          <span class="card-title">{{type}}</span>
+        </div>
+        <div class="card-content">
+          <p>{{activity}}</p>
+        </div>
+        <div class="card-action">
+          <a href="http://www.google.com/search?q={{activity}}">This is a link</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </script>
 
   <!-- Page functionality
@@ -101,10 +124,23 @@
 
     // Get content and handle interaction
     $.ajax({
-      url: "https://www.boredapi.com/api/activity",
+      url: "https://www.boredapi.com/api/activity?participants=2",
     }).done(function (data) {
       console.log(data)
       randomActivityPlaceholder.innerHTML = randomActivityTemplate(data);
+    });
+
+    var socialActivitySource = document.getElementById("social-activity-template").innerHTML;
+    var socialActivityTemplate = Handlebars.compile(socialActivitySource);
+    var socialActivityPlaceholder = document.getElementById('social-activity');
+
+
+    // Get content and handle interaction
+    $.ajax({
+      url: "https://www.boredapi.com/api/activity?participants=2",
+    }).done(function (data) {
+      console.log(data)
+      socialActivityPlaceholder.innerHTML = socialActivityTemplate(data);
     });
   </script>
 
