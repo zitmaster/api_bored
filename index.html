@@ -71,6 +71,9 @@
     <div id = "social-activity">
     </div>
 
+    <div id = "paper-activity">
+    </div>
+
   </div>
 
   <!-- End Document body
@@ -112,6 +115,21 @@
     </div>
   </div>
 </script>
+<script id="paper-activity-template" type="text/x-handlebars-template">
+  <div class="card">
+    <div class="card-image waves-effect waves-block waves-light">
+      <img class="activator" src="https://source.unsplash.com/400x400/?{{type}}">
+    </div>
+    <div class="card-content">
+      <span class="card-title activator grey-text text-darken-4">{{type}}<i class="material-icons right">more_vert</i></span>
+      <p><a href="http://www.google.com/search?q={{activity}}">This is a link</a></p>
+    </div>
+    <div class="card-reveal">
+      <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+      <p>Here is some more information about this product that is only revealed once clicked on.</p>
+    </div>
+  </div>
+</script>
 
   <!-- Page functionality
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -134,13 +152,23 @@
     var socialActivityTemplate = Handlebars.compile(socialActivitySource);
     var socialActivityPlaceholder = document.getElementById('social-activity');
 
-
     // Get content and handle interaction
     $.ajax({
       url: "https://www.boredapi.com/api/activity?participants=2",
     }).done(function (data) {
       console.log(data)
       socialActivityPlaceholder.innerHTML = socialActivityTemplate(data);
+    });
+
+    var paperActivitySource = document.getElementById("paper-activity-template").innerHTML;
+    var paperActivityTemplate = Handlebars.compile(paperActivitySource);
+    var paperActivityPlaceholder = document.getElementById('paper-activity');
+
+    $.ajax({
+      url: "http://www.boredapi.com/api/activity?participants=1",
+    }).done(function (data) {
+      console.log(data)
+      paperActivityPlaceholder.innerHTML = paperActivityTemplate(data);
     });
   </script>
 
