@@ -54,6 +54,7 @@
     <div id="nav">
       <a id="btn_forside" class="waves-effect waves-light btn">Forside</a>
       <a id="btn_side_2" class="waves-effect waves-light btn">Social</a>
+      <a id="btn_side_3" class="waves-effect waves-light btn">En til side</a>
     </div>
 
     <div id="forside">
@@ -130,6 +131,7 @@
 </script>
 
   <script id="paper-activity-template" type="text/x-handlebars-template">
+    <div id="side3">
     <div class="card">
     <div class="card-image waves-effect waves-block waves-light">
       <img class="activator" src="https://source.unsplash.com/400x400/?{{type}}">
@@ -143,6 +145,7 @@
       <p>Here is some more information about this product that is only revealed once clicked on.</p>
     </div>
   </div>
+</div>
 </script>
 
   <!-- Page functionality
@@ -195,6 +198,12 @@
     $("#btn_side_2").click(function () {
       $("#forside").fadeOut(1000);
       $("#side2").fadeIn(1000);
+    });
+
+    $("#btn_side_3").click(function () {
+      $("#side2").fadeOut(1000);
+      $("#forside").fadeOut(1000);
+      $("#side3").fadeIn(1000);
     });
   </script>
 
