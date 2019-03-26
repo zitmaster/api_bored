@@ -19,8 +19,8 @@
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
   <!--jQuery to make easier http calls-->
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
   <!--Import Handlebars-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
@@ -51,28 +51,39 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container" style="margin-top: 3%">
 
-    <div class="row">
-      <div class="col s12 m6">
-        <h4>What to do?</h4>
-        <p>Du keder dig. Men du har ikke overvejet at du kan bruge det fantastiske activity api til at programmere en
-          app, som andre i samme situation kan bruge. Til dette lille projekt skal vi bruge:
-          <ul>
+    <div id="nav">
+      <a id="btn_forside" class="waves-effect waves-light btn">Forside</a>
+      <a id="btn_side_2" class="waves-effect waves-light btn">Social</a>
+    </div>
+
+    <div id="forside">
+      <div class="row">
+        <div class="col s12 m6">
+          <h4>What to do?</h4>
+          <p>Du keder dig. Men du har ikke overvejet at du kan bruge det fantastiske activity api til at programmere en
+            app, som andre i samme situation kan bruge. Til dette lille projekt skal vi bruge:
+            <ul>
               <li><a href="https://www.boredapi.com/">The bored API</a></li>
               <li><a href="https://handlebarsjs.com/">Handlebars javascript</a></li>
               <li><a href="https://materializecss.com/">Materialize css</a></li>
-          </ul>
-        </p>
+            </ul>
+          </p>
+        </div>
+      </div>
+      <div id="random-activity">
       </div>
     </div>
-    <div id="random-activity">
-    </div>
 
+    <div id="side2">
     <!--Placeholder-->
-    <div id = "social-activity">
+    <div id="social-activity">
     </div>
+  </div>
 
-    <div id = "paper-activity">
+  <div id="side3">
+    <div id="paper-activity">
     </div>
+  </div>
 
   </div>
 
@@ -97,8 +108,9 @@
     </div>
 </script>
 
-<script id="social-activity-template" type="text/x-handlebars-template">
-  <div class="row">
+  <script id="social-activity-template" type="text/x-handlebars-template">
+    <div id="side2">
+    <div class="row">
     <div class="col s12 m7">
       <div class="card">
         <div class="card-image">
@@ -114,9 +126,11 @@
       </div>
     </div>
   </div>
+</div>
 </script>
-<script id="paper-activity-template" type="text/x-handlebars-template">
-  <div class="card">
+
+  <script id="paper-activity-template" type="text/x-handlebars-template">
+    <div class="card">
     <div class="card-image waves-effect waves-block waves-light">
       <img class="activator" src="https://source.unsplash.com/400x400/?{{type}}">
     </div>
@@ -169,6 +183,18 @@
     }).done(function (data) {
       console.log(data)
       paperActivityPlaceholder.innerHTML = paperActivityTemplate(data);
+    });
+
+// Her under har jeg gjort at hvis man clicker på en af knapperne så fader nogle af cardsne væk
+    $("#btn_forside").click(function () {
+      $("#forside").fadeIn(1000);
+      $("#side2").fadeOut(1000);
+      $("#side3").fadeOut(1000);
+    });
+
+    $("#btn_side_2").click(function () {
+      $("#forside").fadeOut(1000);
+      $("#side2").fadeIn(1000);
     });
   </script>
 
